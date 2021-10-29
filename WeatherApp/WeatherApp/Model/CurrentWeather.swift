@@ -13,6 +13,7 @@ class CurrentWeather{
     var weatherText : String = ""
     var epochTime : Int = Int.min
     var isDayTime : Bool = true
-    var temp : Int = Int.min
+    var tempMetric : Int = Int.min
+    var tempImperial : Int = Int.min
 
 }

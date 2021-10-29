@@ -39,9 +39,9 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = Bundle.main.loadNibNamed("CurrentWeatherTableViewCell", owner: self, options: nil)?.first as! CurrentWeatherTableViewCell
         
-        cell.lblCityName.text = "\(arrCurrentWeather[indexPath.row].cityInfoName )"
+        cell.lblCityName.text = "\(arrCurrentWeather[indexPath.row].cityInfoName)"
         //cell.lblWeather.text = "\(arrCurrentWeather[indexPath.row].weatherText)"
-        cell.lblTemp.text = "\(arrCurrentWeather[indexPath.row].temp)°C"
+        cell.lblTemp.text = "\(arrCurrentWeather[indexPath.row].tempMetric)°C / \(arrCurrentWeather[indexPath.row].tempImperial)°F "
         
         if(arrCurrentWeather[indexPath.row].weatherText.lowercased().contains("rainny")){
             cell.imgWeather.image = UIImage(named: "rainny")
@@ -99,6 +99,7 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
     func getCurrentWeather(_ cityKey : String, _ cityName : String) -> Promise<CurrentWeather>{
             return Promise<CurrentWeather> { seal -> Void in
                 let url = "\(currentWeatherURL)\(cityKey)?apikey=\(apiKey)" // build URL for current weather here
+                print(url)
                 Alamofire.request(url).responseJSON { response in
                     
                     if response.error != nil {
@@ -112,7 +113,8 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
                     currentWeather.cityKey = cityKey
                     currentWeather.epochTime = WeatherInfo["EpochTime"].intValue
                     currentWeather.isDayTime = WeatherInfo["IsDayTime"].boolValue
-                    currentWeather.temp = WeatherInfo["Temperature"]["Metric"]["Value"].intValue
+                    currentWeather.tempMetric = WeatherInfo["Temperature"]["Metric"]["Value"].intValue
+                    currentWeather.tempImperial = WeatherInfo["Temperature"]["Imperial"]["Value"].intValue
                     currentWeather.weatherText = WeatherInfo["WeatherText"].stringValue
                   
                     
