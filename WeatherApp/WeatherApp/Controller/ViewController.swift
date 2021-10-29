@@ -14,7 +14,7 @@ import PromiseKit
 
 class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSource {
     
-    let arr = ["Seattle WA, USA 54 °F", "Delhi DL, India, 75°F"]
+    //let arr = ["Seattle WA, USA 54 °F", "Delhi DL, India, 75°F"]
     
     var arrCityInfo: [CityInfo] = [CityInfo]()
     var arrCurrentWeather : [CurrentWeather] = [CurrentWeather]()
@@ -30,25 +30,40 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
         
     }
     
+    
+    // table view code
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrCurrentWeather.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = Bundle.main.loadNibNamed("TableViewCell", owner: self, options: nil)?.first as! WeatherTableViewCell
-//        cell.lblCityName.text = "\(arrCurrentWeather[indexPath.row].cityInfoName )"
-//        cell.lblTemp.text = "\(arrCurrentWeather[indexPath.row].temp )"
-//        if(arrCurrentWeather[indexPath.row].weatherText.lowercased().contains("sunny")){
-//            cell.imageWeather.image = UIImage(named: "sunny")
-//        }else if(arrCurrentWeather[indexPath.row].weatherText.lowercased().contains("cloudy")){
-//            cell.imageWeather.image = UIImage(named: "cloudy")
-//        }else{
-//            cell.imageWeather.image = UIImage(named: "rainny")
-//        }
+        let cell = Bundle.main.loadNibNamed("CurrentWeatherTableViewCell", owner: self, options: nil)?.first as! CurrentWeatherTableViewCell
+        
+        cell.lblCityName.text = "\(arrCurrentWeather[indexPath.row].cityInfoName )"
+        //cell.lblWeather.text = "\(arrCurrentWeather[indexPath.row].weatherText)"
+        cell.lblTemp.text = "\(arrCurrentWeather[indexPath.row].temp)°C"
+        
+        if(arrCurrentWeather[indexPath.row].weatherText.lowercased().contains("rainny")){
+            cell.imgWeather.image = UIImage(named: "rainny")
+        }else if(arrCurrentWeather[indexPath.row].weatherText.lowercased().contains("cloudy")){
+            cell.imgWeather.image = UIImage(named: "cloudy")
+        }else if(arrCurrentWeather[indexPath.row].weatherText.lowercased().contains("snowy")){
+            cell.imgWeather.image = UIImage(named: "snowy")
+        }else if(arrCurrentWeather[indexPath.row].weatherText.lowercased().contains("windy")){
+            cell.imgWeather.image = UIImage(named: "windy")
+        }else{
+            cell.imgWeather.image = UIImage(named: "sunny")
+        }
         
         return cell
     }
     
+    //refresh button
+    @IBAction func refreshAction(_ sender: Any) {
+        loadCurrentConditions()
+    }
+    
+    // read DB data
     func loadCurrentConditions(){
         do{
             let realm = try Realm()
@@ -68,6 +83,8 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
         
     }
     
+    
+    //get data
     func getAllCurrentWeather(_ cities: [CityInfo] ) -> Promise<[CurrentWeather]> {
             var promises: [Promise< CurrentWeather>] = []
             

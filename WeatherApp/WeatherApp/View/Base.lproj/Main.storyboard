@@ -54,6 +54,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Current Weather" id="1y0-uv-fQs">
+                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="cXp-WQ-XRc">
+                            <connections>
+                                <action selector="refreshAction:" destination="BYZ-38-t0r" id="EgR-gE-mOL"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="cO4-Jh-AKA">
                             <connections>
                                 <segue destination="ce9-aa-Uef" kind="show" id="Cwh-pX-N58"/>
